@@ -33,6 +33,7 @@ prod_configs(app);
 app.use(process.env.apiVersion + process.env.auth, AuthRoutes);
 app.use(process.env.apiVersion + process.env.otp, OTPRoutes);
 app.use(process.env.apiVersion + process.env.complaints, ComplaintsRoutes);
+app.use(process.env.apiVersion + process.env.okResponseRoute, DBConfigs.okResponse);
 
 // Add a 404 error handler
 app.use((_, res, __) => res.status(404).send({ message: "404: Not Found" }));
