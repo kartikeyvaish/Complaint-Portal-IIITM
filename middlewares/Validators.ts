@@ -113,6 +113,7 @@ export const ValidateUserAuth = async (req: Request, res: Response, next: NextFu
             _id: user._id,
             name: user.name,
             email: user.email,
+            role: user.role,
         };
 
         // Proceed to next middleware
@@ -128,5 +129,19 @@ export async function validateUser(req: Request, res: Response, next: NextFuncti
     const userObj = await UserModel.findOne({ email: req.body.email });
     if (!userObj) return res.status(404).json({ message: Messages.accountMissing });
 
+    next();
+}
+
+// function to check if the user is admin or not
+export async function validateAdmin(req: Request, res: Response, next: NextFunction) {
+    if (req.body.user_details.role !== "ADMIN")
+        return res.status(403).json({ message: Messages.unAuthorizedRequest });
+
+    next();
+}
+
+// function to copy all queries, params to req.body
+export const copyQueryParamsToBody = (req: Request, res: Response, next: NextFunction) => {
+    req.body = { ...req.body, ...req.query, ...req.params };
     next();
 }

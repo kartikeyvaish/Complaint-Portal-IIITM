@@ -2,20 +2,29 @@
 import { Router } from "express";
 
 // Controllers (function that get executed on routes)  
-import { createComplaint, getComplaints } from "../controllers/complaints";
-import { ValidateNewComplaint } from "../middlewares/ComplaintsValidator";
+import { createComplaint, editComplaint, getComplaintDetails, getComplaintsList, markUnderConsideration } from "../controllers/complaints";
+import { ValidateComplaintId, ValidateEditComplaint, ValidateNewComplaint } from "../middlewares/ComplaintsValidator";
 
 // Middlewares (to validate requests)  
-import { ValidateUserAuth } from "../middlewares/Validators";
+import { copyQueryParamsToBody, validateAdmin, ValidateUserAuth } from "../middlewares/Validators";
 
 // Initialize router
 const ComplaintsRoutes = Router();
 
 // Endpoint for getting all complaints
-ComplaintsRoutes.get("/", ValidateUserAuth, getComplaints);
+ComplaintsRoutes.get("/list", copyQueryParamsToBody, ValidateUserAuth, validateAdmin, getComplaintsList);
+
+// Endpoint for getting details of a complaint
+ComplaintsRoutes.get("/details", copyQueryParamsToBody, ValidateComplaintId, ValidateUserAuth, getComplaintDetails);
 
 // Endpoint for creating a new complaint
-ComplaintsRoutes.post("/create", ValidateUserAuth, ValidateNewComplaint, createComplaint);
+ComplaintsRoutes.post("/create", ValidateNewComplaint, ValidateUserAuth, createComplaint);
+
+// Endpoint for editing a complaint
+ComplaintsRoutes.patch("/edit", ValidateEditComplaint, ValidateUserAuth, editComplaint);
+
+// endpoint to mark under consideration
+ComplaintsRoutes.patch("/mark-under-consideration", ValidateComplaintId, ValidateUserAuth, validateAdmin, markUnderConsideration);
 
 // export router
 export default ComplaintsRoutes;
