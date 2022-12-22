@@ -74,6 +74,7 @@ export interface VerifiedEmailSchemaInterface {
 // interface for ResetRequests
 export interface ResetRequestSchemaInterface {
     created_at: Date;
+    email: string;
 }
 
 // interface for RefreshTokens

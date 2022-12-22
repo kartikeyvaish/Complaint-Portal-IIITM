@@ -15,6 +15,10 @@ const ResetRequestsSchema = new mongoose.Schema<ResetRequestSchemaInterface>({
         required: true,
         expires: RESET_TTL,
     },
+    email: {
+        type: String,
+        required: true,
+    }
 });
 
 // Create Model

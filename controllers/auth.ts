@@ -226,7 +226,7 @@ export async function resetPassword(req: Request, res: Response) {
             return res.status(400).json({ message: Messages.invalidResetID });
 
         // Check if user exists with the provided email id
-        const userObj = await UserModel.findOne({ email: req.body.email });
+        const userObj = await UserModel.findOne({ email: isValidResetObj.email });
         if (!userObj) return res.status(400).json({ message: Messages.accountMissing });
 
         // Delete the reset request

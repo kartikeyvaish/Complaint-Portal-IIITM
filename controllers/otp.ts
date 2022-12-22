@@ -101,7 +101,7 @@ export async function validateForgotPasswordOtp(req: Request, res: Response) {
         await otpObj.delete();
 
         // Create a reset request
-        const resetRequest = new ResetRequestsModel();
+        const resetRequest = new ResetRequestsModel({ email: req.body.email });
 
         // Save the reset request
         await resetRequest.save();

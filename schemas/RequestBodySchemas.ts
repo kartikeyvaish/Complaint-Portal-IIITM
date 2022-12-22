@@ -54,7 +54,6 @@ export const SignUpSchema = Joi.object({
 
 // schema to validate reset password request
 export const ResetPasswordSchema = Joi.object({
-    email: EmailSchema,
     new_password: PasswordSchema,
     reset_id: ResetIDSchema,
 }).options({ stripUnknown: true });
