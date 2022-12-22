@@ -68,7 +68,7 @@ export async function login(req: Request, res: Response) {
         if (!isPasswordCorrect) return res.status(400).json({ message: Messages.invalidCredentials, otp_sent: false });
 
         // send otp
-        const sendOtpObj = await sendOtp("to verify your email address.", userObj.email, "2FA Socio Login", "login");
+        const sendOtpObj = await sendOtp("to verify your email address.", userObj.email, "2FA Complaint Portal IIITM Login", "login");
         if (!sendOtpObj.ok) return res.status(500).json({ message: sendOtpObj.message, otp_sent: false });
 
         return res.status(200).send({
