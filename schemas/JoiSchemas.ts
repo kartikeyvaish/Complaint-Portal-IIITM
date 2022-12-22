@@ -261,3 +261,11 @@ export const ComplaintStatusSchema = Joi.string()
 
 // complaint final statement schema
 export const ComplaintFinalStatementSchema = Joi.string().allow("")
+
+// complaint id schema
+export const ComplaintIDSchema = Joi.string().required().messages({
+    "any.required": "Complaint ID is required",
+    "string.empty": "Complaint ID is required",
+    "string.base": "Complaint ID must be a string",
+})
+

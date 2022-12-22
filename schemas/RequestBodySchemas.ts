@@ -5,7 +5,7 @@ import Joi from 'joi';
 import {
     BatchSchema, CurrentPasswordSchema, EmailSchema, HostelNameSchema, NameSchema, NewPasswordSchema, OTPSchema, OTP_IDSchema,
     OTP_TypeSchema, PasswordSchema, PhoneSchema, ResetIDSchema, RoleSchema, RollNumberSchema, RoomNumberSchema, VerifiedEmailIDSchema, YearSchema,
-    TitleSchema, DescriptionSchema, DepartmentSchema, DesignationSchema, ComplaintDepartmentSchema
+    TitleSchema, DescriptionSchema, DepartmentSchema, DesignationSchema, ComplaintDepartmentSchema, ComplaintIDSchema
 } from './JoiSchemas';
 
 // Login Schema to validate the request body for Login API
@@ -66,6 +66,19 @@ export const ChangePasswordSchema = Joi.object({
 
 // Schema to validate new complaint posting requests
 export const NewComplaintSchema = Joi.object({
+    title: TitleSchema,
+    description: DescriptionSchema,
+    complaint_department: ComplaintDepartmentSchema,
+}).options({ stripUnknown: true });
+
+// Schema to validate complaint_id
+export const ComplaintIDBodySchema = Joi.object({
+    complaint_id: ComplaintIDSchema,
+}).options({ stripUnknown: true });
+
+// Schema to validate edit complaint requests
+export const EditComplaintSchema = Joi.object({
+    complaint_id: ComplaintIDSchema,
     title: TitleSchema,
     description: DescriptionSchema,
     complaint_department: ComplaintDepartmentSchema,
