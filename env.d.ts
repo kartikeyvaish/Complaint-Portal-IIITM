@@ -19,7 +19,5 @@ declare namespace NodeJS {
         google_app_password: string
 
         JWT_Key: string
-
-        defaultPassHash: string
     }
 }
