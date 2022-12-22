@@ -1,4 +1,5 @@
 // Configs  
+import { NextFunction, Request, Response } from "express";
 import Messages from "./Messages";
 
 // Get ENV Variables
@@ -18,6 +19,7 @@ const DBConfigs = {
   onConnectionSucceed: () => console.log(`Connected to ${DB_Name} Mongo DB...`),
   onConnectionFailed: (error: any) => console.error(Messages.serverError, error),
   onServerListenSuccess: () => console.log(`Mode = ${DBConfigs.mode} and Listening on ${port}..`),
+  okResponse: (req: Request, res: Response, next: NextFunction) => res.status(200).send({ message: "Server Up and Running" }),
 };
 
 export default DBConfigs;

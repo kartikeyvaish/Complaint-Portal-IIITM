@@ -98,19 +98,20 @@ export async function signup(req: Request, res: Response) {
                 isLoggedIn: false,
             });
 
+        // get the role
+        let role = req.body.role
+
         // department is only for FACULTY
         let block_name = null;
         let department = null;
-        if (req.body.role === "FACULTY" && req.body.department) {
+        if (role === "FACULTY" && req.body.department) {
             department = req.body.department;
-
-            let findIndex = instituteDepartments.findIndex((department) => department === req.body.department);
-            block_name = instituteBlocks[findIndex];
+            block_name = instituteBlocks[department];
         }
 
         // designation is only for FACULTY, STAFF
         let designation = null;
-        if (req.body.role === "FACULTY" || req.body.role === "STAFF") {
+        if (role === "FACULTY" || role === "STAFF") {
             designation = req.body.designation ? req.body.designation : null;
         }
 
@@ -121,7 +122,7 @@ export async function signup(req: Request, res: Response) {
             email: req.body.email,
             password: req.body.password,
             phone: req.body.phone,
-            role: req.body.role,
+            role: role,
             hostel_name: req.body.hostel_name ? req.body.hostel_name : null,
             room_number: req.body.room_number ? req.body.room_number : null,
 
@@ -133,7 +134,7 @@ export async function signup(req: Request, res: Response) {
             block_name: block_name,
 
             // For STUDENT only
-            ...(req.body.role === "STUDENT" ? {
+            ...(role === "STUDENT" ? {
                 roll_number: req.body.roll_number,
                 batch: req.body.batch,
                 year: req.body.year,

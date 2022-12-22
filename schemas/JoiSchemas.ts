@@ -2,11 +2,21 @@
 import Joi from "joi";
 import { batches, complaintDepartments, complaintStatuses, hostels, instituteDepartments, instituteDesignations, roles } from "../config/Constants";
 
-// constants
-const MinPasswordLen = 6;
-const MaxPasswordLen = 20;
+/**
+ * Schemas for all the fields
+ * * NameSchema - To validate name
+ * * EmailSchema - To validate email
+ * * PasswordSchema - To validate password
+ * * PhoneSchema - To validate phone number
+ * * RoleSchema - To validate role
+ */
+// Name schema
+export const NameSchema = Joi.string().required().messages({
+    "any.required": "Name is required",
+    "string.empty": "Name is required",
+})
 
-// Email schema to validate a email
+// Email schema
 export const EmailSchema = Joi.string().email().required().pattern(/@iiitm\.ac\.in$/).messages({
     "any.required": "Email ID is required",
     "string.empty": "Email ID is required",
@@ -15,7 +25,7 @@ export const EmailSchema = Joi.string().email().required().pattern(/@iiitm\.ac\.
     "string.pattern.base": "Email ID should be from IIITM domain",
 })
 
-// Password schema to validate a password
+// Password schema
 export const PasswordSchema = Joi.string()
     .required()
     .messages({
@@ -23,7 +33,7 @@ export const PasswordSchema = Joi.string()
         "string.empty": "Password is required",
     })
 
-// Phone scheam to validate a phone number
+// Phone schema
 export const PhoneSchema = Joi.string()
     .length(10)
     .pattern(/^[0-9]+$/)
@@ -35,7 +45,7 @@ export const PhoneSchema = Joi.string()
         "string.pattern.base": "Phone number should be only digits",
     })
 
-// role schema to validate a role - STUDENT | ADMIN | FACULTY
+// Role Schema - STUDENT | ADMIN | FACULTY
 export const RoleSchema = Joi.string()
     .valid(...roles)
     .required()
@@ -46,7 +56,14 @@ export const RoleSchema = Joi.string()
         "any.only": `Role must be valid. Any one from - ${roles.join(", ")}`,
     })
 
-// roll number schema to validate roll number. It should req required only for students
+
+/**
+ * Schemas for Students Role
+ * * RollNumberSchema - To validate roll number
+ * * BatchSchema - To validate batch
+ * * YearSchema - To validate year
+ */
+// roll number
 export const RollNumberSchema = Joi.when("role", {
     is: Joi.string().valid("STUDENT"),
     then: Joi.string().required().messages({
@@ -57,7 +74,7 @@ export const RollNumberSchema = Joi.when("role", {
     otherwise: Joi.optional().allow("")
 })
 
-// Batch schema to validate batch. It should req required only for students
+// Batch schema
 export const BatchSchema = Joi.when("role", {
     is: Joi.string().valid("STUDENT"),
     then: Joi.string().required().valid(...batches)
@@ -70,7 +87,7 @@ export const BatchSchema = Joi.when("role", {
     otherwise: Joi.optional().allow("")
 })
 
-// Year schema to validate year. It should req required only for students
+// Year schema
 export const YearSchema = Joi.when("role", {
     is: Joi.string().valid("STUDENT"),
     then: Joi.string().required().messages({
@@ -81,9 +98,9 @@ export const YearSchema = Joi.when("role", {
     otherwise: Joi.optional().allow("")
 })
 
-// Hostel Name schema to validate hostel name. It should req required only for students, staff (if applicable)
+// Hostel Name Schema
 export const HostelNameSchema = Joi.when("role", {
-    is: Joi.string().valid("STUDENT", "STAFF"),
+    is: Joi.string().valid("STUDENT"),
     then: Joi.string().required().valid(...hostels)
         .messages({
             "any.required": "Hostel name is required",
@@ -94,19 +111,11 @@ export const HostelNameSchema = Joi.when("role", {
     otherwise: Joi.optional().allow("")
 })
 
-// Designation schema to validate staff_designation. It should req required only for staff
-export const DesignationSchema = Joi.when("role", {
-    is: Joi.string().valid("STAFF", "FACULTY"),
-    then: Joi.string().required().messages({
-        "string.base": "Designation must be a string",
-        "string.empty": "Designation cannot be empty",
-        "any.required": "Designation is required",
-        "any.only": `Designation must be valid. Any one from - ${instituteDesignations.join(", ")}`,
-    }),
-    otherwise: Joi.optional().allow("")
-})
-
-// Department schema to validate department. It should req required only for staff
+/**
+ * Schemas for Faculty Role
+ * * DepartmentSchema - To validate department
+ */
+// Department schema
 export const DepartmentSchema = Joi.when("role", {
     is: Joi.string().valid("FACULTY"),
     then: Joi.string().required().messages({
@@ -118,9 +127,14 @@ export const DepartmentSchema = Joi.when("role", {
     otherwise: Joi.optional().allow("")
 })
 
+
+/**
+ * Schemas for Student & Faculty Role
+ * * RoomNumberSchema - To validate room number
+ */
 // Room number schema 
 export const RoomNumberSchema = Joi.when("role", {
-    is: Joi.string().valid("FACULTY", "STUDENT"),
+    is: Joi.string().valid("STUDENT", "FACULTY"),
     then: Joi.string().required().messages({
         "string.base": "Room Number name must be a string",
         "string.empty": "Room Number name cannot be empty",
@@ -129,13 +143,35 @@ export const RoomNumberSchema = Joi.when("role", {
     otherwise: Joi.optional().allow("")
 })
 
-// Current Password schema to validate a password
+/**
+ * Schemas for Faculty and Staff Role
+ * * DesignationSchema - To validate designation
+ */
+// Designation schema 
+export const DesignationSchema = Joi.when("role", {
+    is: Joi.string().valid("STAFF", "FACULTY"),
+    then: Joi.string().required().messages({
+        "string.base": "Designation must be a string",
+        "string.empty": "Designation cannot be empty",
+        "any.required": "Designation is required",
+        "any.only": `Designation must be valid. Any one from - ${instituteDesignations.join(", ")}`,
+    }),
+    otherwise: Joi.optional().allow("")
+})
+
+
+/**
+ * AuthSchemas
+ * * CurrentPasswordSchema - To validate current password.
+ * * NewPasswordSchema - To validate new password.
+ */
+// Current Password schema
 export const CurrentPasswordSchema = Joi.string().required().messages({
     "any.required": "Current Password is required",
     "string.empty": "Current Password is required",
 })
 
-// New Password schema to validate a password
+// New Password schema
 export const NewPasswordSchema = Joi.string()
     .required()
     .messages({
@@ -143,6 +179,14 @@ export const NewPasswordSchema = Joi.string()
         "string.empty": "New Password is required",
     })
 
+/**
+ * OTP, Resets Schemas
+ * * OTP_IDSchema - To validate OTP ID.
+ * * OTP_TypeSchema - To validate OTP Type.
+ * * OTPSchema - To validate OTP.
+ * * VerifiedEmailIDSchema - To validate Email Verification ID.
+ * * ResetIDSchema - To validate Reset ID.
+ */
 // OTP Id schema
 export const OTP_IDSchema = Joi.string().required().messages({
     "any.required": "OTP ID is required",
@@ -161,12 +205,6 @@ export const OTPSchema = Joi.string().required().messages({
     "string.empty": "OTP is required",
 })
 
-// Name schema
-export const NameSchema = Joi.string().required().messages({
-    "any.required": "Name is required",
-    "string.empty": "Name is required",
-})
-
 // Verified Email ID schema
 export const VerifiedEmailIDSchema = Joi.string().allow("").messages({
     "any.required": "Email Verification ID is required",
@@ -179,6 +217,14 @@ export const ResetIDSchema = Joi.string().required().messages({
     "string.empty": "Reset ID is required",
 })
 
+/**
+ * Complaints Schemas
+ * * TitleSchema - To validate title.
+ * * DescriptionSchema - To validate description.
+ * * ComplaintDepartmentSchema - To validate complaint department.
+ * * ComplaintStatusSchema - To validate complaint status.
+ * * ComplaintFinalStatementSchema - To validate complaint final statement.
+*/
 // Title Schema
 export const TitleSchema = Joi.string().required().messages({
     "any.required": "Title is required",
@@ -190,6 +236,17 @@ export const DescriptionSchema = Joi.string().required().messages({
     "any.required": "Description is required",
     "string.empty": "Description is required",
 })
+
+// complaint department schema
+export const ComplaintDepartmentSchema = Joi.string()
+    .valid(...complaintDepartments)
+    .required()
+    .messages({
+        "any.required": "Complaint Department is required",
+        "string.empty": "Complaint Department is required",
+        "string.base": "Complaint Department must be a string",
+        "any.only": `Complaint Department must be valid. Any one from - ${complaintDepartments.join(", ")}`,
+    })
 
 // Complaint status Schema
 export const ComplaintStatusSchema = Joi.string()
@@ -204,14 +261,3 @@ export const ComplaintStatusSchema = Joi.string()
 
 // complaint final statement schema
 export const ComplaintFinalStatementSchema = Joi.string().allow("")
-
-// complaint department schema
-export const ComplaintDepartmentSchema = Joi.string()
-    .valid(...complaintDepartments)
-    .required()
-    .messages({
-        "any.required": "Complaint Department is required",
-        "string.empty": "Complaint Department is required",
-        "string.base": "Complaint Department must be a string",
-        "any.only": `Complaint Department must be valid. Any one from - ${complaintDepartments.join(", ")}`,
-    })
