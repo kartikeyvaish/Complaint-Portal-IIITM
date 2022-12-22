@@ -26,6 +26,7 @@ const Messages = {
   loggedtOut: "Logged Out Successfully",
   passwordReset: "Password Reset Successfully",
   accountCreated: "Account Created Successfully",
+  logoutSuccess: "Logged Out Successfully",
 
   // OTP 
   otpExpired: "OTP Expired",

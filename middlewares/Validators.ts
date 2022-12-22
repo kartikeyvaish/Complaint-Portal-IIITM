@@ -121,3 +121,12 @@ export const ValidateUserAuth = async (req: Request, res: Response, next: NextFu
         return res.status(500).send({ message: "Token Authentication Failed" });
     }
 };
+
+// function to check whether the user is present in the database or not
+export async function validateUser(req: Request, res: Response, next: NextFunction) {
+    // Check if user exists with the provided email id
+    const userObj = await UserModel.findOne({ email: req.body.email });
+    if (!userObj) return res.status(404).json({ message: Messages.accountMissing });
+
+    next();
+}

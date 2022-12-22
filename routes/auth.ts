@@ -2,12 +2,12 @@
 import { Router } from "express";
 
 // Controllers (function that get executed on routes)
-import { changePassword, forgotPasswordOtp, login, refreshToken, resetPassword, sendNewUserOtp, signup } from "../controllers/auth";
+import { changePassword, forgotPasswordOtp, login, logout, refreshToken, resetPassword, sendNewUserOtp, signup } from "../controllers/auth";
 
 // Middlewares (to validate requests)
 import { ValidateLogin, ValidateSignUp, ValidateEmail, } from "../middlewares/AuthValidators";
 import { ValidateChangePassword, ValidateNewUserSignUp, ValidateResetPassword } from "../middlewares/OTPMiddlewares";
-import { ValidateRefreshToken, ValidateUserAuth } from "../middlewares/Validators";
+import { ValidateRefreshToken, validateUser, ValidateUserAuth } from "../middlewares/Validators";
 
 // Initialize router
 const AuthRoutes = Router();
@@ -21,8 +21,11 @@ AuthRoutes.post("/signup", ValidateSignUp, ValidateEmail, signup);
 // Endpoint for Login
 AuthRoutes.post("/login", ValidateLogin, login);
 
+// Endpoint for logout
+AuthRoutes.delete("/logout", ValidateUserAuth, logout);
+
 // EndPoint for Forgot Password 
-AuthRoutes.post("/forgot-password", ValidateNewUserSignUp, forgotPasswordOtp);
+AuthRoutes.post("/forgot-password", ValidateNewUserSignUp, validateUser, forgotPasswordOtp);
 
 // Endpoint for Reset password
 AuthRoutes.post("/reset-password", ValidateResetPassword, resetPassword);

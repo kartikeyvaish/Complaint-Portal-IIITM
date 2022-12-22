@@ -5,13 +5,15 @@ import { Request, Response } from "express";
 // Models imports   
 import ResetRequestsModel from "../models/ResetRequests";
 import UserModel from "../models/UserModel";
-import VerifiedEmailModel from "../models/VerifiedEmailsModel";
 
 // Helpers 
 import { getUserPayload } from "../helpers/auth";
-import Messages from "../config/Messages";
 import { sendOtp } from "../helpers/otp";
-import { instituteBlocks, instituteDepartments } from "../config/Constants";
+
+// Config imports
+import { instituteBlocks } from "../config/Constants";
+import Messages from "../config/Messages";
+import RefreshTokenModel from "../models/RefreshTokensModel";
 
 // function to send otp to a new user
 export async function sendNewUserOtp(req: Request, res: Response) {
@@ -23,16 +25,6 @@ export async function sendNewUserOtp(req: Request, res: Response) {
             email_verified: true,
             acount_exists: true,
             otp_sent: false,
-        });
-
-        // If email is already verified then don't send OTP and get all additional details
-        const isVerified = await VerifiedEmailModel.findOne({ email: req.body.email });
-        if (isVerified) return res.status(400).send({
-            message: Messages.emailAlreadyVerified,
-            email_verified: true,
-            acount_exists: false,
-            otp_sent: false,
-            verified_id: isVerified._id
         });
 
         // send an OTP to the user
@@ -55,7 +47,12 @@ export async function sendNewUserOtp(req: Request, res: Response) {
         });
     } catch (error) {
         // Error Response
-        return res.status(500).send({ message: Messages.serverError });
+        return res.status(400).send({
+            message: Messages.serverError,
+            email_verified: false,
+            acount_exists: false,
+            otp_sent: false,
+        });
     }
 }
 
@@ -64,23 +61,38 @@ export async function login(req: Request, res: Response) {
     try {
         // check if an account exists with the provided email id
         const userObj = await UserModel.findOne({ email: req.body.email });
-        if (!userObj) return res.status(400).json({ message: Messages.accountMissing });
+        if (!userObj) return res.status(400).json({ message: Messages.accountMissing, otp_sent: false });
 
         // check if the password is correct 
         const isPasswordCorrect = bcrypt.compareSync(req.body.password, userObj.password);
-        if (!isPasswordCorrect) return res.status(400).json({ message: Messages.invalidCredentials });
+        if (!isPasswordCorrect) return res.status(400).json({ message: Messages.invalidCredentials, otp_sent: false });
 
         // send otp
         const sendOtpObj = await sendOtp("to verify your email address.", userObj.email, "2FA Socio Login", "login");
-        if (!sendOtpObj.ok) return res.status(500).json({ message: sendOtpObj.message });
+        if (!sendOtpObj.ok) return res.status(500).json({ message: sendOtpObj.message, otp_sent: false });
 
         return res.status(200).send({
             message: "Login Successful. OTP has been sent to email id. Please verify.",
             otp_id: sendOtpObj.otp_id,
+            otp_sent: true,
         });
     } catch (error) {
         // Error Response
-        return res.status(500).send({ message: Messages.serverError });
+        return res.status(500).send({ message: Messages.serverError, otp_sent: false });
+    }
+}
+
+// function to execute on logout API request
+export async function logout(req: Request, res: Response) {
+    try {
+        // Delete the refresh token from the database
+        await RefreshTokenModel.deleteMany({ user_id: req.body.user_details._id });
+
+        // Success Response
+        return res.status(200).send({ message: Messages.logoutSuccess, loggedOut: true });
+    } catch (error) {
+        // Error Response
+        return res.status(500).send({ message: Messages.serverError, loggedOut: false });
     }
 }
 
@@ -88,15 +100,11 @@ export async function login(req: Request, res: Response) {
 export async function signup(req: Request, res: Response) {
     try {
         // Check if user with same email already exists
-        const userObj = await UserModel
-            .findOne({ email: req.body.email })
+        const userObj = await UserModel.findOne({ email: req.body.email })
 
         // If user exists, return error
         if (userObj)
-            return res.status(400).send({
-                message: Messages.uniqueRegister,
-                isLoggedIn: false,
-            });
+            return res.status(400).send({ message: Messages.uniqueRegister, isLoggedIn: false });
 
         // get the role
         let role = req.body.role
@@ -159,7 +167,7 @@ export async function signup(req: Request, res: Response) {
         });
     } catch (error) {
         // Error Response 
-        return res.status(500).send({ message: Messages.serverError });
+        return res.status(500).send({ message: Messages.serverError, isLoggedIn: false });
     }
 }
 
@@ -168,7 +176,6 @@ export async function changePassword(req: Request, res: Response) {
     try {
         // get the user obj
         const userObj = await UserModel.findById(req.body.user_details._id);
-        if (!userObj) return res.status(400).json({ message: Messages.accountMissing });
 
         // check if the password is correct
         const isPasswordCorrect = bcrypt.compareSync(req.body.current_password, userObj.password);
@@ -195,12 +202,8 @@ export async function changePassword(req: Request, res: Response) {
 // function to send otp for forgot password
 export async function forgotPasswordOtp(req: Request, res: Response) {
     try {
-        // Check if user exists with the provided email id
-        const userObj = await UserModel.findOne({ email: req.body.email });
-        if (!userObj) return res.status(400).json({ message: Messages.accountMissing });
-
         // Send otp
-        const sendOtpObj = await sendOtp("to verify your email address.", userObj.email, "Reset Password Request.", "reset");
+        const sendOtpObj = await sendOtp("to verify your email address.", req.body.email, "Reset Password Request.", "reset");
         if (!sendOtpObj.ok) return res.status(500).json({ message: sendOtpObj.message });
 
         // Return response
