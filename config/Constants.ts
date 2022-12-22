@@ -20,3 +20,19 @@ export const instituteBlocks = <const>{
 };
 
 export const instituteDesignations = <const>["Director", "Professor", "Professor & Head", "Assistant Professor", "Associate Professor", "Hostel Supervisor", "Librarian", "Warden", "Other"];
+
+export const statusFilters: any = {
+    "pendingReview": "PENDING REVIEW",
+    "underConsideration": "UNDER CONSIDERATION",
+    "resolved": "RESOLVED",
+    "rejected": "REJECTED",
+}
+
+export const complaintDepartmentFilters = {
+    "hostelDepartment": "HOSTEL DEPARTMENT",
+    "academicsDepartment": "ACADEMICS DEPARTMENT",
+    "electricityDepartment": "ELECTRICITY DEPARTMENT",
+    "waterDepartment": "WATER DEPARTMENT",
+    "internetDepartment": "INTERNET DEPARTMENT",
+    "others": "OTHERS",
+}

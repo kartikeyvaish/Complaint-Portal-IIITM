@@ -2,6 +2,7 @@ const Messages = {
   // General
   serverError: "Server Error. Please try again Later",
   unauthorized: "You are not authorized to access this link. Sign in again to continue.",
+  unAuthorizedRequest: "Unauthorized Request to this API",
   tokenMissing: "Authentication Token Required",
   tokenRefreshed: "Token Refreshed Successfully",
   tokenExpired: "Token Expired",
@@ -37,6 +38,9 @@ const Messages = {
 
   // Complaints
   complaintCreated: "Complaint Created Successfully",
+  complaintNotFound: "Complaint Not Found",
+  complaintDetails: "Complaint Details",
+  complaintEdited: "Complaint Edited Successfully",
 };
 
 export default Messages;
