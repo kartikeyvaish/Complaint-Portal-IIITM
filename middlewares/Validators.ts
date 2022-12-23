@@ -114,6 +114,7 @@ export const ValidateUserAuth = async (req: Request, res: Response, next: NextFu
             name: user.name,
             email: user.email,
             role: user.role,
+            admin_department: user.admin_department,
         };
 
         // Proceed to next middleware
