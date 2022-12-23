@@ -14,6 +14,7 @@ import prod_configs from "./config/Production";
 // Importing routes     
 import AuthRoutes from "./routes/auth";
 import ComplaintsRoutes from "./routes/complaints";
+import ComplaintsAdminRoutes from "./routes/complaintsAdmin";
 import OTPRoutes from "./routes/otp";
 
 // Connect to MongoDB
@@ -31,8 +32,9 @@ prod_configs(app);
 
 // Add Routes  
 app.use(process.env.apiVersion + process.env.auth, AuthRoutes);
-app.use(process.env.apiVersion + process.env.otp, OTPRoutes);
 app.use(process.env.apiVersion + process.env.complaints, ComplaintsRoutes);
+app.use(process.env.apiVersion + process.env.complaintsAdmin, ComplaintsAdminRoutes);
+app.use(process.env.apiVersion + process.env.otp, OTPRoutes);
 app.use(process.env.apiVersion + process.env.okResponseRoute, DBConfigs.okResponse);
 
 // Add a 404 error handler
