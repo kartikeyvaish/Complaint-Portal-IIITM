@@ -7,23 +7,13 @@ import ComplaintsModel from "../models/ComplaintsModel";
 
 // Helpers 
 import Messages from "../config/Messages";
-import { complaintDepartmentFilters, statusFilters } from "../config/Constants";
+import { getFilters } from "../helpers/helpers";
 
 // function to get complaints
 export async function getComplaintsList(req: Request, res: Response) {
     try {
-        let count = req.body.count ? parseInt(req.body.count.toString()) : 10;
-        let after = req.body.after ? req.body.after.toString() : null;
-
-        // Filter to apply after body
-        const afterThis_id = req.body?.after ? new mongoose.Types.ObjectId(req.body.after.toString()) : null;
-        let afterIdFilter = after ? { _id: { $lt: afterThis_id } } : {};
-
-        // if complaint_department is not null, then filter based on complaint_department
-        let complaint_department = req.body.complaint_department ? complaintDepartmentFilters[req.body.complaint_department] : null;
-
-        // if status is not null, then filter based on status
-        let status = req.body.status ? statusFilters[req.body.status] : null;
+        // Get filters from the request
+        const { afterIdFilter, complaint_department, count, status } = getFilters(req);
 
         // This runs a aggregation to get complaints based on limit, skip,etc
         // A lookup to get the user details who posted the complaint (posted_by)
@@ -82,9 +72,63 @@ export async function getComplaintsList(req: Request, res: Response) {
         // Send Response
         return res.status(200).send({ complaints: allComplaints, message: "All Complaints" });
     } catch (error) {
-        console.log(error);
         // Error Response 
         return res.status(500).send({ message: Messages.serverError, isLoggedIn: false });
+    }
+}
+
+// Function to get complaints posted by the user
+export async function getOwnComplaints(req: Request, res: Response) {
+    try {
+        // Get user_id from the request body
+        const user_id = req.body.user_details._id.toString();
+
+        // get complaints posted by the user
+        // Get filters from the request
+        const { afterIdFilter, complaint_department, count, status } = getFilters(req);
+
+        // This runs a aggregation to get complaints based on limit, skip,etc
+        // A lookup to get the user details who posted the complaint (posted_by)
+        const allComplaints = await ComplaintsModel.aggregate([
+            // Filter based on after body
+            {
+                $match: {
+                    ...afterIdFilter,
+
+                    // Include complaint_department in the filter if complaint_department is not null
+                    ...(complaint_department ? { complaint_department: complaint_department } : {}),
+
+                    // Include status in the filter if status is not null
+                    ...(status ? { status: status } : {}),
+
+                    // Filter based on user_id
+                    posted_by: new mongoose.Types.ObjectId(user_id)
+                },
+            },
+            // sort them in descending order of _id
+            {
+                $sort: {
+                    _id: -1,
+                },
+            },
+            // limit to count
+            {
+                $limit: count,
+            },
+            // Remove unwanted fields
+            {
+                $project: {
+                    __v: 0,
+                    posted_by: 0,
+                }
+            },
+        ])
+
+        // Send Response
+        return res.status(200).send({ complaints: allComplaints, message: "All Complaints" });
+    } catch (error) {
+        // Error Response
+        return res.status(500).send({ message: Messages.serverError });
     }
 }
 

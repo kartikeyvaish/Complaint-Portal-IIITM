@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // Controllers (function that get executed on routes)  
-import { createComplaint, editComplaint, getComplaintDetails, getComplaintsList, markUnderConsideration } from "../controllers/complaints";
+import { createComplaint, editComplaint, getComplaintDetails, getComplaintsList, getOwnComplaints, markUnderConsideration } from "../controllers/complaints";
 import { ValidateComplaintId, ValidateEditComplaint, ValidateNewComplaint } from "../middlewares/ComplaintsValidator";
 
 // Middlewares (to validate requests)  
@@ -16,6 +16,9 @@ ComplaintsRoutes.get("/list", copyQueryParamsToBody, ValidateUserAuth, validateA
 
 // Endpoint for getting details of a complaint
 ComplaintsRoutes.get("/details", copyQueryParamsToBody, ValidateComplaintId, ValidateUserAuth, getComplaintDetails);
+
+// Endpoint to get complaints posted by the user
+ComplaintsRoutes.get("/own", copyQueryParamsToBody, ValidateUserAuth, getOwnComplaints);
 
 // Endpoint for creating a new complaint
 ComplaintsRoutes.post("/create", ValidateNewComplaint, ValidateUserAuth, createComplaint);
