@@ -2,17 +2,14 @@
 import { Router } from "express";
 
 // Controllers (function that get executed on routes)  
-import { createComplaint, editComplaint, getComplaintDetails, getComplaintsList, getOwnComplaints, markUnderConsideration } from "../controllers/complaints";
-import { ValidateComplaintId, ValidateEditComplaint, ValidateNewComplaint } from "../middlewares/ComplaintsValidator";
+import { addComment, createComplaint, deleteComment, editComplaint, getComplaintDetails, getOwnComplaints, } from "../controllers/complaints";
+import { ValidateComplaintId, ValidateDeleteComment, ValidateEditComplaint, ValidateNewComment, ValidateNewComplaint, } from "../middlewares/ComplaintsValidator";
 
 // Middlewares (to validate requests)  
-import { copyQueryParamsToBody, validateAdmin, ValidateUserAuth } from "../middlewares/Validators";
+import { copyQueryParamsToBody, ValidateUserAuth } from "../middlewares/Validators";
 
 // Initialize router
 const ComplaintsRoutes = Router();
-
-// Endpoint for getting all complaints
-ComplaintsRoutes.get("/list", copyQueryParamsToBody, ValidateUserAuth, validateAdmin, getComplaintsList);
 
 // Endpoint for getting details of a complaint
 ComplaintsRoutes.get("/details", copyQueryParamsToBody, ValidateComplaintId, ValidateUserAuth, getComplaintDetails);
@@ -26,8 +23,11 @@ ComplaintsRoutes.post("/create", ValidateNewComplaint, ValidateUserAuth, createC
 // Endpoint for editing a complaint
 ComplaintsRoutes.patch("/edit", ValidateEditComplaint, ValidateUserAuth, editComplaint);
 
-// endpoint to mark under consideration
-ComplaintsRoutes.patch("/mark-under-consideration", ValidateComplaintId, ValidateUserAuth, validateAdmin, markUnderConsideration);
+// endpoint to add a comment to a complaint
+ComplaintsRoutes.post("/add-comment", ValidateNewComment, ValidateUserAuth, addComment);
+
+// endpoint to delete a comment from a complaint
+ComplaintsRoutes.delete("/delete-comment", ValidateDeleteComment, ValidateUserAuth, deleteComment);
 
 // export router
 export default ComplaintsRoutes;
