@@ -41,6 +41,18 @@ const Messages = {
   complaintNotFound: "Complaint Not Found",
   complaintDetails: "Complaint Details",
   complaintEdited: "Complaint Edited Successfully",
+  complaintAdminInvalid: "Admin can view/edit complaints of his/her department only",
+  alreadyRejected: "Complaint is already rejected",
+  complaintRejected: "Complaint Rejected Successfully",
+  alreadyResolved: "Complaint is already resolved",
+  complaintResolved: "Complaint Resolved Successfully",
+  complaintDeleted: "Complaint Deleted Successfully",
+  alreadyUnderConsideration: "Complaint is already under consideration",
+  complaintUnderConsideration: "Complaint Under Consideration Successfully",
+  addedComment: "Comment Added Successfully",
+  commentNotFound: "Comment Not Found",
+  commentDeleted: "Comment Deleted Successfully",
+  commentAlreadyDeleted: "Comment is already deleted",
 };
 
 export default Messages;
