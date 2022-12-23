@@ -1,6 +1,6 @@
 {
   "name": "complain-portal-iiitm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Complaint Portal IIITM Backend using Node.js, Express.js, MongoDB",
   "main": "index.js",
   "scripts": {
