@@ -4,12 +4,20 @@ import { Types } from "mongoose";
 // Local imports
 import { batches, complaintDepartments, complaintStatuses, hostels, roles } from "../config/Constants";
 
+// interface for ComplaintCommentSchema
+export interface ComplaintCommentSchema {
+    comment: string;
+    commented_by: Types.ObjectId;
+    isDeleted: boolean;
+}
+
 // interface for ComplaintsSchema
 export interface ComplaintsSchemaInterface {
     title: string;
     description: string;
     posted_by: Types.ObjectId;
     status: typeof complaintStatuses[number];
+    comments: ComplaintCommentSchema[];
     final_statement: string;
     complaint_department: typeof complaintDepartments[number];
 

@@ -248,6 +248,11 @@ export const ComplaintDepartmentSchema = Joi.string()
         "any.only": `Complaint Department must be valid. Any one from - ${complaintDepartments.join(", ")}`,
     })
 
+// complaint department schema (editable)
+export const ComplaintDepartmentSchemaEditable = Joi.string()
+    .valid(...complaintDepartments)
+    .messages({ "any.only": `Complaint Department must be valid. Any one from - ${complaintDepartments.join(", ")}` })
+
 // Complaint status Schema
 export const ComplaintStatusSchema = Joi.string()
     .valid(...complaintStatuses)

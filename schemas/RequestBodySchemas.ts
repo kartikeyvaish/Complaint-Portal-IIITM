@@ -5,7 +5,7 @@ import Joi from 'joi';
 import {
     BatchSchema, CurrentPasswordSchema, EmailSchema, HostelNameSchema, NameSchema, NewPasswordSchema, OTPSchema, OTP_IDSchema,
     OTP_TypeSchema, PasswordSchema, PhoneSchema, ResetIDSchema, RoleSchema, RollNumberSchema, RoomNumberSchema, VerifiedEmailIDSchema, YearSchema,
-    TitleSchema, DescriptionSchema, DepartmentSchema, DesignationSchema, ComplaintDepartmentSchema, ComplaintIDSchema
+    TitleSchema, DescriptionSchema, DepartmentSchema, DesignationSchema, ComplaintDepartmentSchema, ComplaintIDSchema, ComplaintFinalStatementSchema, ComplaintDepartmentSchemaEditable
 } from './JoiSchemas';
 
 // Login Schema to validate the request body for Login API
@@ -76,10 +76,28 @@ export const ComplaintIDBodySchema = Joi.object({
     complaint_id: ComplaintIDSchema,
 }).options({ stripUnknown: true });
 
+// Schema to vaalidate new comment
+export const NewCommentSchema = Joi.object({
+    complaint_id: ComplaintIDSchema,
+    comment: Joi.string().required(),
+}).options({ stripUnknown: true });
+
+// Schema to validate deleting a comment
+export const DeleteCommentSchema = Joi.object({
+    complaint_id: ComplaintIDSchema,
+    comment_id: Joi.string().required(),
+}).options({ stripUnknown: true });
+
 // Schema to validate edit complaint requests
 export const EditComplaintSchema = Joi.object({
     complaint_id: ComplaintIDSchema,
-    title: TitleSchema,
-    description: DescriptionSchema,
-    complaint_department: ComplaintDepartmentSchema,
+    title: Joi.string(),
+    description: Joi.string(),
+    complaint_department: ComplaintDepartmentSchemaEditable,
+}).options({ stripUnknown: true });
+
+// Schema to validate resolve/reject complaint requests
+export const RejectComplaintSchema = Joi.object({
+    complaint_id: ComplaintIDSchema,
+    final_statement: ComplaintFinalStatementSchema,
 }).options({ stripUnknown: true });
