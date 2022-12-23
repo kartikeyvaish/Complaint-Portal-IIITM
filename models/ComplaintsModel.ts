@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 // Local imports
 import { complaintDepartments, complaintStatuses } from "../config/Constants";
-import { ComplaintsSchemaInterface, FileProps } from "../types/SchemaTypes";
+import { ComplaintCommentSchema, ComplaintsSchemaInterface, FileProps } from "../types/SchemaTypes";
 
 // File attatchments schema
 const FilePropsSchema = new mongoose.Schema<FileProps>({
@@ -15,6 +15,22 @@ const FilePropsSchema = new mongoose.Schema<FileProps>({
     height: Number,
     width: Number,
 });
+
+// Comment schema
+const CommentSchema = new mongoose.Schema<ComplaintCommentSchema>({
+    comment: {
+        type: String,
+        required: true,
+    },
+    commented_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
+}, { timestamps: true });
 
 // Create Schema
 const ComplaintModelSchema = new mongoose.Schema<ComplaintsSchemaInterface>({
@@ -35,6 +51,10 @@ const ComplaintModelSchema = new mongoose.Schema<ComplaintsSchemaInterface>({
         required: true,
         enum: complaintStatuses,
         default: "PENDING REVIEW"
+    },
+    comments: {
+        type: [CommentSchema],
+        default: [],
     },
     final_statement: {
         type: String,
