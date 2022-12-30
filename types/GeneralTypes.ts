@@ -1,8 +1,9 @@
 // Packages imports
-import mongoose from "mongoose";
+import mongoose, { LeanDocument, Types } from "mongoose";
 
 // Local imports
-import { ComplaintsSchemaInterface } from "./SchemaTypes";
+import { ComplaintsSchemaInterface, UserSchemaInterface } from "./SchemaTypes";
+import lodash from 'lodash';
 
 // interface for isComplainValid function
 export interface validComplaintResponse {
@@ -12,3 +13,8 @@ export interface validComplaintResponse {
         _id: mongoose.Types.ObjectId;
     }
 }
+
+// interface for userDetails object in the request body
+export interface UserDetailsProps extends lodash.Omit<LeanDocument<UserSchemaInterface> & {
+    _id: Types.ObjectId;
+}, "password"> { }

@@ -35,6 +35,7 @@ export interface UserSchemaInterface {
     phone: string;
     room_number: string | null;
     role: typeof roles[number];
+    initial_role: typeof roles[number];
 
     // if role is STUDENT
     roll_number: string | null;

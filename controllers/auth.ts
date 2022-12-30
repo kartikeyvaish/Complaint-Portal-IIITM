@@ -14,6 +14,7 @@ import { sendOtp } from "../helpers/otp";
 import { instituteBlocks } from "../config/Constants";
 import Messages from "../config/Messages";
 import RefreshTokenModel from "../models/RefreshTokensModel";
+import { UserDetailsProps } from "../types/GeneralTypes";
 
 // function to send otp to a new user
 export async function sendNewUserOtp(req: Request, res: Response) {
@@ -131,6 +132,7 @@ export async function signup(req: Request, res: Response) {
             password: req.body.password,
             phone: req.body.phone,
             role: role,
+            initial_role: role,
             hostel_name: req.body.hostel_name ? req.body.hostel_name : null,
             room_number: req.body.room_number ? req.body.room_number : null,
 
@@ -195,6 +197,18 @@ export async function changePassword(req: Request, res: Response) {
         return res.status(200).send({ message: Messages.passwordChanged });
     } catch (error) {
         // Error Response 
+        return res.status(500).send({ message: Messages.serverError });
+    }
+}
+
+// function to get user details
+export async function getProfile(req: Request, res: Response) {
+    try {
+        const userDetails: UserDetailsProps = req.body.user_details;
+
+        return res.status(200).send({ user_details: userDetails, message: Messages.userDetails });
+    } catch (error) {
+        // Error Response
         return res.status(500).send({ message: Messages.serverError });
     }
 }

@@ -1,6 +1,7 @@
 // Packages imports 
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
+import lodash from "lodash";
 
 // Model Imports
 import UserModel from "../models/UserModel";
@@ -108,14 +109,11 @@ export const ValidateUserAuth = async (req: Request, res: Response, next: NextFu
         if (!user)
             return res.status(400).send({ message: Messages.accountMissing });
 
+        // omit password from the user object
+        const userDetails = lodash.omit(user.toObject(), ["password"]);
+
         // If user is found then set the user in the request
-        req.body.user_details = {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            admin_department: user.admin_department,
-        };
+        req.body.user_details = userDetails
 
         // Proceed to next middleware
         next();
@@ -136,6 +134,14 @@ export async function validateUser(req: Request, res: Response, next: NextFuncti
 // function to check if the user is admin or not
 export async function validateAdmin(req: Request, res: Response, next: NextFunction) {
     if (req.body.user_details.role !== "ADMIN")
+        return res.status(403).json({ message: Messages.unAuthorizedRequest });
+
+    next();
+}
+
+// function to check if user is Super Admin or not
+export async function validateSuperAdmin(req: Request, res: Response, next: NextFunction) {
+    if (req.body.user_details.role !== "SUPERADMIN")
         return res.status(403).json({ message: Messages.unAuthorizedRequest });
 
     next();

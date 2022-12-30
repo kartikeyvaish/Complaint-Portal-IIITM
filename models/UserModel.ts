@@ -24,6 +24,10 @@ const UserModelSchema = new mongoose.Schema<UserSchemaInterface>({
         required: true,
         enum: roles,
     },
+    initial_role: {
+        type: String,
+        enum: roles,
+    },
     room_number: {
         type: String,
         default: null,

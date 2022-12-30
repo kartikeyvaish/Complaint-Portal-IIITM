@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // Controllers (function that get executed on routes)
-import { changePassword, forgotPasswordOtp, login, logout, refreshToken, resetPassword, sendNewUserOtp, signup } from "../controllers/auth";
+import { changePassword, forgotPasswordOtp, getProfile, login, logout, refreshToken, resetPassword, sendNewUserOtp, signup } from "../controllers/auth";
 
 // Middlewares (to validate requests)
 import { ValidateLogin, ValidateSignUp, ValidateEmail, } from "../middlewares/AuthValidators";
@@ -32,6 +32,9 @@ AuthRoutes.post("/reset-password", ValidateResetPassword, resetPassword);
 
 // Endpoint for Changing password
 AuthRoutes.put("/change-password", ValidateUserAuth, ValidateChangePassword, changePassword);
+
+// Endpoint for getting profile details
+AuthRoutes.get("/profile", ValidateUserAuth, getProfile)
 
 // Endpoint for Refreshing Token
 AuthRoutes.post("/refresh-token", ValidateRefreshToken, refreshToken);

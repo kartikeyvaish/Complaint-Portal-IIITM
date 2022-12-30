@@ -274,3 +274,12 @@ export const ComplaintIDSchema = Joi.string().required().messages({
     "string.base": "Complaint ID must be a string",
 })
 
+/**
+ * SuperAdmin Schemas
+ * * User ID Schema - To validate user ID.
+ */
+export const UserIDSchema = Joi.string().required().messages({
+    "any.required": "User ID is required",
+    "string.empty": "User ID is required",
+    "string.base": "User ID must be a string",
+})
