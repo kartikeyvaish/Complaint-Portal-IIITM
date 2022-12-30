@@ -28,6 +28,11 @@ const Messages = {
   passwordReset: "Password Reset Successfully",
   accountCreated: "Account Created Successfully",
   logoutSuccess: "Logged Out Successfully",
+  userDetails: "User Details Fetch Successfully",
+  alreadyAdmin: "User is already an Admin",
+  adminCriteriaError: "Admin Roles can be assigned to faculty/staff only",
+  roleUpdated: "Role Updated Successfully",
+  notAdmin: "User is not an Admin",
 
   // OTP 
   otpExpired: "OTP Expired",
