@@ -1,7 +1,7 @@
 // Constants
 export const batches = <const>["BCS", "IMT", "IMG", "MBA", "MTECH", "PHD", null];
 
-export const roles = <const>["STUDENT", "FACULTY", "ADMIN", "STAFF"];
+export const roles = <const>["STUDENT", "FACULTY", "ADMIN", "STAFF", "SUPERADMIN"];
 
 export const hostels = <const>["BH-1 Aravali Hostel", "BH-2 Nilgiri Hostel", "BH-3 Shivalik Hostel", "GH Girls Hostel", "IVH - Visitor's Hostel", null];
 

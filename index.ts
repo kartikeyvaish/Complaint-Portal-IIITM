@@ -16,6 +16,7 @@ import AuthRoutes from "./routes/auth";
 import ComplaintsRoutes from "./routes/complaints";
 import ComplaintsAdminRoutes from "./routes/complaintsAdmin";
 import OTPRoutes from "./routes/otp";
+import SuperAdminRoutes from "./routes/superAdminRoutes";
 
 // Connect to MongoDB
 mongoose.set('strictQuery', true);
@@ -35,6 +36,7 @@ app.use(process.env.apiVersion + process.env.auth, AuthRoutes);
 app.use(process.env.apiVersion + process.env.complaints, ComplaintsRoutes);
 app.use(process.env.apiVersion + process.env.complaintsAdmin, ComplaintsAdminRoutes);
 app.use(process.env.apiVersion + process.env.otp, OTPRoutes);
+app.use(process.env.apiVersion + process.env.superAdmin, SuperAdminRoutes);
 app.use(process.env.apiVersion + process.env.okResponseRoute, DBConfigs.okResponse);
 
 // Add a 404 error handler
