@@ -91,3 +91,11 @@ export interface RefreshTokenSchemaInterface {
     created_at: Date;
     user_id: Types.ObjectId;
 }
+
+// interface for Suggestions
+export interface SuggestionsInterface {
+    department: typeof complaintDepartments[number];
+    posted_by: Types.ObjectId;
+    description: string;
+    is_anonymous: boolean;
+}

@@ -14,6 +14,10 @@ declare namespace NodeJS {
         auth: string
         otp: string
         complaints: string
+        complaintsAdmin: string
+        superAdmin: string
+        okResponseRoute: string
+        suggestions: string
 
         google_admin_email: string
         google_app_password: string

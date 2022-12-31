@@ -283,3 +283,13 @@ export const UserIDSchema = Joi.string().required().messages({
     "string.empty": "User ID is required",
     "string.base": "User ID must be a string",
 })
+
+
+/**
+ * Suggestions Schemas
+ * * is_anonymous Schema - To validate is_anonymous.
+ */
+export const IsAnonymousSchema = Joi.boolean().required().messages({
+    "any.required": "is_anonymous is required",
+    "boolean.base": "is_anonymous must be a boolean",
+})

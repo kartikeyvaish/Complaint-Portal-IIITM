@@ -58,6 +58,11 @@ const Messages = {
   commentNotFound: "Comment Not Found",
   commentDeleted: "Comment Deleted Successfully",
   commentAlreadyDeleted: "Comment is already deleted",
+
+  // Suggestions
+  suggestionCreated: "Suggestion Created Successfully",
+  sugggDepartRequired: "Department is required for suggestions",
+
 };
 
 export default Messages;

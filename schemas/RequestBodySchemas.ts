@@ -5,7 +5,7 @@ import Joi from 'joi';
 import {
     BatchSchema, CurrentPasswordSchema, EmailSchema, HostelNameSchema, NameSchema, NewPasswordSchema, OTPSchema, OTP_IDSchema,
     OTP_TypeSchema, PasswordSchema, PhoneSchema, ResetIDSchema, RoleSchema, RollNumberSchema, RoomNumberSchema, VerifiedEmailIDSchema, YearSchema,
-    TitleSchema, DescriptionSchema, DepartmentSchema, DesignationSchema, ComplaintDepartmentSchema, ComplaintIDSchema, ComplaintFinalStatementSchema, ComplaintDepartmentSchemaEditable, UserIDSchema
+    TitleSchema, DescriptionSchema, DepartmentSchema, DesignationSchema, ComplaintDepartmentSchema, ComplaintIDSchema, ComplaintFinalStatementSchema, ComplaintDepartmentSchemaEditable, UserIDSchema, IsAnonymousSchema
 } from './JoiSchemas';
 
 // Login Schema to validate the request body for Login API
@@ -105,4 +105,11 @@ export const RejectComplaintSchema = Joi.object({
 // Schema to validate assign/unassign admin role
 export const AssignAdminSchema = Joi.object({
     user_id: UserIDSchema,
+}).options({ stripUnknown: true });
+
+// Schema to validate adding suggestion requests
+export const AddSuggestionSchema = Joi.object({
+    department: ComplaintDepartmentSchema,
+    description: DescriptionSchema,
+    is_anonymous: IsAnonymousSchema,
 }).options({ stripUnknown: true });
