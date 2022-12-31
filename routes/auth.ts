@@ -31,7 +31,7 @@ AuthRoutes.post("/forgot-password", ValidateNewUserSignUp, validateUser, forgotP
 AuthRoutes.post("/reset-password", ValidateResetPassword, resetPassword);
 
 // Endpoint for Changing password
-AuthRoutes.put("/change-password", ValidateUserAuth, ValidateChangePassword, changePassword);
+AuthRoutes.patch("/change-password", ValidateUserAuth, ValidateChangePassword, changePassword);
 
 // Endpoint for getting profile details
 AuthRoutes.get("/profile", ValidateUserAuth, getProfile)
