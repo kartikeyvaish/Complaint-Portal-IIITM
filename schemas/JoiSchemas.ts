@@ -47,7 +47,7 @@ export const PhoneSchema = Joi.string()
 
 // Role Schema - STUDENT | ADMIN | FACULTY
 export const RoleSchema = Joi.string()
-    .valid(...roles)
+    .valid("STUDENT", "FACULTY", "STAFF")
     .required()
     .messages({
         "any.required": "Role is required",
