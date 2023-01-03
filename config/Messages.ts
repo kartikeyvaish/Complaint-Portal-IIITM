@@ -58,6 +58,7 @@ const Messages = {
   commentNotFound: "Comment Not Found",
   commentDeleted: "Comment Deleted Successfully",
   commentAlreadyDeleted: "Comment is already deleted",
+  complaintDepartmentMissing: "You should be ADMIN and should be assigned to a department to view/edit complaints",
 
   // Suggestions
   suggestionCreated: "Suggestion Created Successfully",
