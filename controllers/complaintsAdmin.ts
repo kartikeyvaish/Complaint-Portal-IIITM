@@ -122,6 +122,37 @@ export async function markUnderConsideration(req: Request, res: Response) {
     }
 }
 
+// function to resolve a complaint
+export async function resolveComplaint(req: Request, res: Response) {
+    try {
+        // Constants
+        let { complaint_id, user_details, final_statement } = req.body;
+
+        // Check if complaint exists
+        const { message: errMessage, valid_complain, complaintObj } = await isComplainValid(complaint_id, user_details.admin_department)
+        if (!valid_complain)
+            return res.status(403).send({ message: errMessage });
+
+        // Check if the complaint is already resolved/rejected
+        const { editable, message } = isComplainEditable(complaintObj.status);
+        if (!editable) return res.status(403).send({ message: message });
+
+        // Check if final_statement is provided
+        if (final_statement) complaintObj.final_statement = final_statement;
+
+        // update the status of the complaint
+        complaintObj.status = "RESOLVED";
+
+        // Save the complaint
+        await complaintObj.save();
+
+        return res.status(200).send({ message: Messages.complaintResolved });
+    } catch (error) {
+        // Error Response
+        return res.status(500).send({ message: Messages.serverError });
+    }
+}
+
 // function to reject a complaint
 export async function rejectComplaint(req: Request, res: Response) {
     try {

@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 // Controllers (function that get executed on routes)  
-import { getComplaintsList, markUnderConsideration, rejectComplaint } from "../controllers/complaintsAdmin";
+import { getComplaintsList, markUnderConsideration, rejectComplaint, resolveComplaint } from "../controllers/complaintsAdmin";
 import { ValidateComplaintId, ValidateRejectComplaint } from "../middlewares/ComplaintsValidator";
 
 // Middlewares (to validate requests)  
@@ -16,6 +16,9 @@ ComplaintsAdminRoutes.get("/list", copyQueryParamsToBody, ValidateUserAuth, vali
 
 // endpoint to mark under consideration
 ComplaintsAdminRoutes.patch("/mark-under-consideration", ValidateComplaintId, ValidateUserAuth, validateAdmin, markUnderConsideration);
+
+// endpoint to resolve a complaint
+ComplaintsAdminRoutes.patch("/resolve", ValidateRejectComplaint, ValidateUserAuth, validateAdmin, resolveComplaint);
 
 // endpoint to reject a complaint
 ComplaintsAdminRoutes.patch("/reject", ValidateRejectComplaint, ValidateUserAuth, validateAdmin, rejectComplaint);
