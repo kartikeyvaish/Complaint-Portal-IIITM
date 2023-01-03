@@ -52,6 +52,10 @@ const ComplaintModelSchema = new mongoose.Schema<ComplaintsSchemaInterface>({
         enum: complaintStatuses,
         default: "PENDING REVIEW"
     },
+    location: {
+        type: String,
+        default: null
+    },
     comments: {
         type: [CommentSchema],
         default: [],

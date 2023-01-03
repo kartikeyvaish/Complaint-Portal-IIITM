@@ -69,6 +69,7 @@ export const NewComplaintSchema = Joi.object({
     title: TitleSchema,
     description: DescriptionSchema,
     complaint_department: ComplaintDepartmentSchema,
+    location: Joi.string(),
 }).options({ stripUnknown: true });
 
 // Schema to validate complaint_id
@@ -94,6 +95,7 @@ export const EditComplaintSchema = Joi.object({
     title: Joi.string(),
     description: Joi.string(),
     complaint_department: ComplaintDepartmentSchemaEditable,
+    location: Joi.string(),
 }).options({ stripUnknown: true });
 
 // Schema to validate resolve/reject complaint requests

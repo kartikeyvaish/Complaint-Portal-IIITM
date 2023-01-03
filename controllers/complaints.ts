@@ -123,6 +123,7 @@ export async function createComplaint(req: Request, res: Response) {
             description: req.body.description,
             posted_by: req.body.user_details._id,
             complaint_department: req.body.complaint_department,
+            location: req.body.location || null
         });
 
         // Save the complaint
@@ -152,12 +153,13 @@ export async function editComplaint(req: Request, res: Response) {
         if (!editable) return res.status(403).send({ message: message });
 
         // Desctructure the fields that can be edited
-        const { title, description, complaint_department } = req.body;
+        const { title, description, complaint_department, location } = req.body;
 
-        // UPdate the fields that can be edited
+        // Update the fields that can be edited
         complaintObj.title = title ? title : complaintObj.title;
         complaintObj.description = description ? description : complaintObj.description;
         complaintObj.complaint_department = complaint_department ? complaint_department : complaintObj.complaint_department;
+        complaintObj.location = location ? location : complaintObj.location;
 
         // Save the complaint
         await complaintObj.save();

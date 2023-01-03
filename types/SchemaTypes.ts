@@ -15,6 +15,7 @@ export interface ComplaintCommentSchema {
 export interface ComplaintsSchemaInterface {
     title: string;
     description: string;
+    location: string;
     posted_by: Types.ObjectId;
     status: typeof complaintStatuses[number];
     comments: ComplaintCommentSchema[];
