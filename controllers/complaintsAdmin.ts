@@ -11,14 +11,12 @@ import Messages from "../config/Messages";
 // function to get complaints
 export async function getComplaintsList(req: Request, res: Response) {
     try {
-        // An admin can only see complaints from his/her department
-        // So perform a check whether req.body.complaint_department is present or not
-        // if its present then, return an error saying that admin can only see complaints from his/her department
-        if (req.body.complaint_department)
-            return res.status(403).send({ message: Messages.complaintAdminInvalid });
-
         // define complaint_department
         let complaint_department = req.body.user_details.admin_department;
+
+        // if complaint_department is null, then return error
+        if (!complaint_department)
+            return res.status(400).send({ message: Messages.complaintDepartmentMissing });
 
         // Get filters from the request
         const { afterIdFilter, count, status } = getFilters(req);
