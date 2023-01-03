@@ -15,7 +15,7 @@ const SuggestionsRoutes = express.Router();
 SuggestionsRoutes.get("/", copyQueryParamsToBody, ValidateUserAuth, validateAdmin, getSuggestions);
 
 // Endpoint to add a suggestion
-SuggestionsRoutes.post("/", ValidateUserAuth, validateAdmin, ValidateAddSuggestions, addSuggestion);
+SuggestionsRoutes.post("/", ValidateUserAuth, ValidateAddSuggestions, addSuggestion);
 
 // export router
 export default SuggestionsRoutes;
