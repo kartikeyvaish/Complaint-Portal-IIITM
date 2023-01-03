@@ -3,7 +3,7 @@ import { Router } from "express";
 
 // Controllers (function that get executed on routes)   
 import { assignAdmin, unassignAdmin } from "../controllers/superAdmin";
-import { ValidateAssignAdmin } from "../middlewares/SuperAdminValidators";
+import { ValidateAssignAdmin, ValidateUnassignAdmin } from "../middlewares/SuperAdminValidators";
 
 // Middlewares (to validate requests)  
 import { validateSuperAdmin, ValidateUserAuth } from "../middlewares/Validators";
@@ -15,7 +15,7 @@ const SuperAdminRoutes = Router();
 SuperAdminRoutes.post("/assign-admin", ValidateAssignAdmin, ValidateUserAuth, validateSuperAdmin, assignAdmin);
 
 // Endpoint to unassign a admin role from faculty
-SuperAdminRoutes.patch("/unassign-admin", ValidateAssignAdmin, ValidateUserAuth, validateSuperAdmin, unassignAdmin);
+SuperAdminRoutes.patch("/unassign-admin", ValidateUnassignAdmin, ValidateUserAuth, validateSuperAdmin, unassignAdmin);
 
 // export router
 export default SuperAdminRoutes;

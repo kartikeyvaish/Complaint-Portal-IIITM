@@ -9,7 +9,7 @@ import UserModel from "../models/UserModel";
 export async function assignAdmin(req: Request, res: Response) {
     try {
         // Get the user_id from request body
-        const { user_id } = req.body;
+        const { user_id, admin_department } = req.body;
 
         // Get the user from database
         const userObj = await UserModel.findById(user_id);
@@ -28,6 +28,9 @@ export async function assignAdmin(req: Request, res: Response) {
 
         // Update the user role to ADMIN
         userObj.role = "ADMIN";
+
+        // Update admin_department
+        userObj.admin_department = admin_department;
 
         // Save the user
         await userObj.save();

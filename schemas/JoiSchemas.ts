@@ -248,6 +248,17 @@ export const ComplaintDepartmentSchema = Joi.string()
         "any.only": `Complaint Department must be valid. Any one from - ${complaintDepartments.join(", ")}`,
     })
 
+// admin department schema
+export const AdminDepartmentSchema = Joi.string()
+    .valid(...complaintDepartments)
+    .required()
+    .messages({
+        "any.required": "Admin Department is required",
+        "string.empty": "Admin Department is required",
+        "string.base": "Admin Department must be a string",
+        "any.only": `Admin Department must be valid. Any one from - ${complaintDepartments.join(", ")}`,
+    })
+
 // complaint department schema (editable)
 export const ComplaintDepartmentSchemaEditable = Joi.string()
     .valid(...complaintDepartments)
